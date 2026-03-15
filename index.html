@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>VisionTok 💍</title>
+
+  <!--
+  ═══════════════════════════════════════════════════════
+   VISIONTOK — Customization Guide
+  ═══════════════════════════════════════════════════════
+
+  📹 TO REPLACE VIDEOS:
+     Place your .mp4 files in the same folder as this HTML file.
+     Name them: 1M.mp4, 2M.mp4, 3M.mp4 ... 12M.mp4
+
+  ✏️ TO CHANGE SUBTITLES:
+     Edit the `captions` array in the <script> section below.
+
+  💰 TO CHANGE DOLLAR COUNTERS:
+     Edit the `counters` array in the <script> section below.
+
+  🎨 TO CHANGE COLORS:
+     Edit the CSS variables in :root { } below.
+
+  📝 TO ADD/REMOVE VIDEOS:
+     Change VIDEO_COUNT in the script and update the arrays.
+  ═══════════════════════════════════════════════════════
+  -->
+
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --bg: #000;
+      --header-h: 52px;
+      --sidebar-w: 72px;
+      --caption-font: 'Segoe UI', system-ui, sans-serif;
+      --accent: #fe2c55;
+      --gold: #ffd700;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: var(--caption-font);
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ══════════════════════════════════
+       HEADER
+    ══════════════════════════════════ */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
+    }
+
+    .hdr-icon {
+      font-size: 22px;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0.9;
+      line-height: 1;
+    }
+
+    .hdr-logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 12px rgba(254,44,85,0.7);
+    }
+
+    .hdr-logo span {
+      color: var(--accent);
+    }
+
+    /* ══════════════════════════════════
+       VIDEO FEED — scroll container
+    ══════════════════════════════════ */
+    #feed {
+      position: fixed;
+      inset: 0;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #feed::-webkit-scrollbar { display: none; }
+
+    /* ══════════════════════════════════
+       INDIVIDUAL VIDEO SLIDE
+    ══════════════════════════════════ */
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 100svh;          /* use svh for mobile safe area */
+      height: 100vh;           /* fallback */
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow: hidden;
+      background: #111;
+      flex-shrink: 0;
+    }
+
+    .slide video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Tap to play/pause ripple */
+    .slide.tap-feedback::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.08);
+      pointer-events: none;
+      animation: tapFade 0.35s ease forwards;
+    }
+    @keyframes tapFade { to { opacity: 0; } }
+
+    /* ══════════════════════════════════
+       RIGHT SIDEBAR BUTTONS
+    ══════════════════════════════════ */
+    .sidebar {
+      position: absolute;
+      right: 8px;
+      bottom: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .btn-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+      user-select: none;
+    }
+    .btn-icon:active { transform: scale(0.88); background: rgba(255,255,255,0.28); }
+
+    /* Dollar sign — gold accent */
+    .btn-dollar .btn-icon {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 8px rgba(255,215,0,0.6);
+    }
+
+    .btn-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+      letter-spacing: 0.3px;
+    }
+
+    /* ══════════════════════════════════
+       CAPTION / SUBTITLE
+    ══════════════════════════════════ */
+    .caption {
+      position: absolute;
+      bottom: 24px;
+      left: 12px;
+      right: 86px;   /* leave room for sidebar */
+      z-index: 10;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.45);
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .caption p {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+      text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000,
+         0    2px 4px rgba(0,0,0,0.8);
+    }
+
+    /* ══════════════════════════════════
+       BOTTOM NAV (minimal, non-functional)
+    ══════════════════════════════════ */
+    #bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 52px;
+      z-index: 100;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.6;
+      padding: 0 28px;
+      cursor: pointer;
+    }
+    .nav-tab.active { opacity: 1; }
+    .nav-tab.active .nav-icon { color: var(--accent); }
+
+    .nav-icon { font-size: 22px; }
+
+    /* ══════════════════════════════════
+       LOADING PLACEHOLDER
+    ══════════════════════════════════ */
+    .slide-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 50%, #111 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .slide-placeholder span {
+      font-size: 48px;
+      opacity: 0.15;
+    }
+
+    /* ══════════════════════════════════
+       PROGRESS DOTS (optional visual)
+    ══════════════════════════════════ */
+    #progress {
+      position: fixed;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.25);
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      background: #fff;
+      height: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══ -->
+  <header id="header">
+    <span class="hdr-icon">←</span>
+    <span class="hdr-logo">Vision<span>Tok</span></span>
+    <div style="display:flex;gap:14px;align-items:center;">
+      <span class="hdr-icon">⊙</span>
+      <span class="hdr-icon">⋮</span>
+    </div>
+  </header>
+
+  <!-- ══ VIDEO FEED ══ -->
+  <div id="feed"></div>
+
+  <!-- ══ PROGRESS DOTS ══ -->
+  <div id="progress"></div>
+
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav id="bottom-nav">
+    <div class="nav-tab active">
+      <span class="nav-icon">⊹</span>
+      VisionTok
+    </div>
+  </nav>
+
+  <script>
+    // ═══════════════════════════════════════════
+    //  CONFIGURATION — edit these freely!
+    // ═══════════════════════════════════════════
+
+    const VIDEO_COUNT = 12;
+
+    /* Captions for each video (index 0 = video 1M.mp4) */
+    const captions = [
+      "Off Grid House 🏡",
+      "Lots of animals (They have to breed to make cheese 🧀🤷🏻‍♂️)",
+      "Your favorite pink car and one Toyota Hylux for me cause it is indestructible, like our love 🫶🏻",
+      "🧀 Cheese Fridge 🧀",
+      "Chickens 🐤, Ducks 🦆 and one aggresive Swan in our lake 🦢",
+      "Parmesan Bowl ofc 🧀",
+      "Jacuzzy and Sauna 😏😏😏",
+      "Japanese Toilet cause i want to flex our status to guests 😎",
+      "The biggest bed u can imagine, with waterproof cover 😏",
+      "If you think someone I don't truly love would have been able to make me wear the ''fachapulsera'', you don't know me at all 😽",
+      "Spicy Room 😌😳",
+      "Our HoneyMoon in China with your brother as a guide 💍"
+    ];
+
+    /* Dollar counters shown below $ button */
+    const counters = ["1M","2M","3M","4M","5M","6M","7M","8M","9M","10M","11M","12M"];
+
+    // ═══════════════════════════════════════════
+    //  BUILD SLIDES
+    // ═══════════════════════════════════════════
+
+    const feed = document.getElementById('feed');
+    const progressBar = document.getElementById('progress');
+
+    for (let i = 0; i < VIDEO_COUNT; i++) {
+      const n = i + 1;
+
+      // ── Dot ──
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      progressBar.appendChild(dot);
+
+      // ── Slide ──
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      slide.dataset.index = i;
+
+      // Placeholder background
+      slide.innerHTML = `<div class="slide-placeholder"><span>💍</span></div>`;
+
+      // Video element
+      const vid = document.createElement('video');
+      vid.src = `${n}M.mp4`;
+      vid.loop = true;
+      vid.muted = true;
+      vid.playsInline = true;
+      vid.setAttribute('playsinline', '');
+      vid.setAttribute('webkit-playsinline', '');
+      vid.preload = i < 3 ? 'auto' : 'metadata';  // preload first 3
+      vid.style.zIndex = '2';
+
+      // Remove placeholder once loaded
+      vid.addEventListener('loadeddata', () => {
+        const ph = slide.querySelector('.slide-placeholder');
+        if (ph) ph.remove();
+      });
+
+      // Tap to toggle play/pause
+      vid.addEventListener('click', () => {
+        if (vid.paused) { vid.play(); } else { vid.pause(); }
+        slide.classList.add('tap-feedback');
+        slide.addEventListener('animationend', () => slide.classList.remove('tap-feedback'), { once: true });
+      });
+
+      slide.appendChild(vid);
+
+      // ── Right Sidebar ──
+      const sidebar = document.createElement('div');
+      sidebar.className = 'sidebar';
+      sidebar.innerHTML = `
+        <div class="btn-wrap btn-dollar">
+          <button class="btn-icon" aria-label="Vision value" tabindex="-1">$</button>
+          <span class="btn-label dollar-count">${counters[i]}</span>
+        </div>
+        <div class="btn-wrap">
+          <button class="btn-icon" aria-label="Cheese" tabindex="-1">🧀</button>
+          <span class="btn-label">∞</span>
+        </div>
+        <div class="btn-wrap">
+          <button class="btn-icon" aria-label="Together" tabindex="-1">☭</button>
+          <span class="btn-label">∞</span>
+        </div>
+        <div class="btn-wrap">
+          <button class="btn-icon" aria-label="Profile" tabindex="-1" style="font-size:20px;">👤</button>
+        </div>
+      `;
+      slide.appendChild(sidebar);
+
+      // ── Caption ──
+      const cap = document.createElement('div');
+      cap.className = 'caption';
+      cap.innerHTML = `<p>${captions[i]}</p>`;
+      slide.appendChild(cap);
+
+      feed.appendChild(slide);
+    }
+
+    // ═══════════════════════════════════════════
+    //  INTERSECTION OBSERVER — play/pause
+    // ═══════════════════════════════════════════
+
+    const slides = () => document.querySelectorAll('.slide');
+    const dots = () => document.querySelectorAll('.dot');
+
+    let currentIndex = 0;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const slide = entry.target;
+        const vid = slide.querySelector('video');
+        const idx = parseInt(slide.dataset.index);
+
+        if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+          currentIndex = idx;
+
+          // Play current
+          if (vid) vid.play().catch(() => {});
+
+          // Update progress dots
+          dots().forEach((d, i) => d.classList.toggle('active', i === idx));
+
+          // Lazy-load adjacent videos
+          const all = slides();
+          [-1, 0, 1, 2].forEach(offset => {
+            const neighborIdx = idx + offset;
+            if (neighborIdx >= 0 && neighborIdx < VIDEO_COUNT) {
+              const neighborVid = all[neighborIdx].querySelector('video');
+              if (neighborVid && neighborVid.preload === 'none') {
+                neighborVid.preload = 'auto';
+                neighborVid.load();
+              }
+            }
+          });
+
+        } else {
+          if (vid) { vid.pause(); }
+        }
+      });
+    }, { threshold: [0.6] });
+
+    slides().forEach(s => observer.observe(s));
+
+    // ═══════════════════════════════════════════
+    //  INFINITE LOOP — scroll detection
+    // ═══════════════════════════════════════════
+
+    let isLooping = false;
+
+    feed.addEventListener('scroll', () => {
+      if (isLooping) return;
+
+      const allSlides = slides();
+      const feedH = feed.clientHeight;
+      const scrollTop = feed.scrollTop;
+      const maxScroll = feed.scrollHeight - feedH;
+
+      // Reached bottom → jump to top
+      if (scrollTop >= maxScroll - 10) {
+        isLooping = true;
+        feed.scrollTo({ top: 0, behavior: 'instant' });
+        setTimeout(() => { isLooping = false; }, 300);
+        return;
+      }
+
+      // Reached top → jump to bottom
+      if (scrollTop <= 10 && currentIndex === 0) {
+        // only if user was already at top and is scrolling up
+      }
+    }, { passive: true });
+
+    // Touch-based infinite swipe
+    let touchStartY = 0;
+    let touchStartScroll = 0;
+
+    feed.addEventListener('touchstart', e => {
+      touchStartY = e.touches[0].clientY;
+      touchStartScroll = feed.scrollTop;
+    }, { passive: true });
+
+    feed.addEventListener('touchend', e => {
+      if (isLooping) return;
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      const allSlides = slides();
+      const feedH = feed.clientHeight;
+      const maxScroll = feed.scrollHeight - feedH;
+
+      // Swiped down on last video
+      if (dy > 30 && currentIndex === VIDEO_COUNT - 1 && feed.scrollTop >= maxScroll - 20) {
+        isLooping = true;
+        feed.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => { isLooping = false; }, 600);
+        return;
+      }
+
+      // Swiped up on first video
+      if (dy < -30 && currentIndex === 0 && feed.scrollTop <= 20) {
+        isLooping = true;
+        feed.scrollTo({ top: maxScroll, behavior: 'smooth' });
+        setTimeout(() => { isLooping = false; }, 600);
+      }
+    }, { passive: true });
+
+    // Keyboard nav (desktop)
+    document.addEventListener('keydown', e => {
+      const allSlides = slides();
+      const feedH = feed.clientHeight;
+
+      if (e.key === 'ArrowDown' || e.key === ' ') {
+        e.preventDefault();
+        const next = (currentIndex + 1) % VIDEO_COUNT;
+        allSlides[next].scrollIntoView({ behavior: 'smooth' });
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = (currentIndex - 1 + VIDEO_COUNT) % VIDEO_COUNT;
+        allSlides[prev].scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // Autoplay first video
+    window.addEventListener('load', () => {
+      const firstVid = document.querySelector('.slide video');
+      if (firstVid) firstVid.play().catch(() => {});
+    });
+  </script>
+</body>
+</html>
