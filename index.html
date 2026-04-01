@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Vendedor de Cuentos — Música</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080a0f;
+      --surface: rgba(255,255,255,0.03);
+      --border:  rgba(255,255,255,0.07);
+      --accent:  #b8a07a;
+      --text:    #e8e2d8;
+      --muted:   rgba(232,226,216,0.38);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .blob-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(110,140,160,0.12) 0%, transparent 70%);
+      top: -200px; right: -150px;
+    }
+    .blob-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(184,160,122,0.09) 0%, transparent 70%);
+      bottom: -150px; left: -100px;
+      animation-duration: 24s;
+      animation-direction: alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px,30px) scale(1.05); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px 0 56px;
+      gap: 36px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .logo-main-wrap { position: relative; }
+    .logo-main-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,160,122,0.15) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.04); }
+    }
+
+    .logo-main {
+      display: block;
+      width: clamp(160px, 34vw, 260px);
+      height: clamp(160px, 34vw, 260px);
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 60px rgba(184,160,122,0.12), 0 24px 64px rgba(0,0,0,0.6);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-main:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 80px rgba(184,160,122,0.2), 0 28px 72px rgba(0,0,0,0.7);
+    }
+
+    .hero-text { text-align: center; }
+
+    .hero-eyebrow {
+      font-size: clamp(0.6rem, 2vw, 0.72rem);
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.4rem, 8vw, 5rem);
+      letter-spacing: 0.14em;
+      line-height: 0.95;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-title .small-line {
+      display: block;
+      font-size: 0.42em;
+      letter-spacing: 0.5em;
+      color: var(--muted);
+      margin: 8px 0 4px;
+      font-style: normal;
+    }
+    .hero-sub {
+      margin-top: 14px;
+      font-size: clamp(0.58rem, 2vw, 0.68rem);
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: rgba(232,226,216,0.25);
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 1px;
+      height: 56px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      margin: 0 auto;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    /* ── Platforms ── */
+    .platforms-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      animation: fadeUp 1s 0.4s ease both;
+    }
+    .platforms-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .platforms-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .platform-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      transition: background 0.25s, border-color 0.25s, transform 0.22s, box-shadow 0.25s;
+      backdrop-filter: blur(8px);
+    }
+    .platform-btn:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    }
+    .platform-btn:active { transform: scale(0.97); }
+
+    .platform-btn.spotify:hover  { border-color: rgba(30,215,96,0.4);   box-shadow: 0 8px 28px rgba(30,215,96,0.08); }
+    .platform-btn.youtube:hover  { border-color: rgba(255,70,50,0.4);   box-shadow: 0 8px 28px rgba(255,70,50,0.08); }
+    .platform-btn.itunes:hover   { border-color: rgba(252,108,180,0.4); box-shadow: 0 8px 28px rgba(252,108,180,0.07); }
+
+    /* ── Tracklist ── */
+    .section {
+      margin-top: 72px;
+      animation: fadeUp 1s 0.55s ease both;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 1.05rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .tracklist { list-style: none; }
+
+    .track {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: background 0.3s, border-color 0.3s, transform 0.25s;
+      cursor: default;
+      position: relative;
+    }
+    .track::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%) scaleY(0);
+      width: 2px; height: 60%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: transform 0.25s;
+    }
+    .track:hover {
+      background: var(--surface);
+      border-color: var(--border);
+      transform: translateX(4px);
+    }
+    .track:hover::before { transform: translateY(-50%) scaleY(1); }
+
+    .track-num { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted); text-align: right; }
+    .track-info { display: flex; flex-direction: column; gap: 3px; }
+    .track-name { font-size: 0.9rem; letter-spacing: 0.06em; color: var(--text); transition: color 0.25s; }
+    .track:hover .track-name { color: var(--accent); }
+    .track-meta { font-size: 0.67rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+    .track-duration { font-size: 0.72rem; letter-spacing: 0.08em; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    .track.featured { background: rgba(184,160,122,0.06); border-color: rgba(184,160,122,0.2); }
+    .track.featured .track-name,
+    .track.featured .track-num { color: var(--accent); }
+
+    .now-playing {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(184,160,122,0.1);
+      border: 1px solid rgba(184,160,122,0.25);
+      font-size: 0.57rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .now-playing span { animation: blink 1.4s ease infinite; }
+    .now-playing span:nth-child(2) { animation-delay: 0.2s; }
+    .now-playing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%, 80%, 100% { opacity: 1; } 40% { opacity: 0.1; } }
+
+    /* ── Footer ── */
+    .footer-divider {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+      margin: 64px auto 0;
+    }
+    .footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 32px 0 0;
+      animation: fadeUp 1s 0.7s ease both;
+    }
+    .reco-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .logo-reco {
+      width: clamp(48px, 10vw, 64px);
+      height: clamp(48px, 10vw, 64px);
+      object-fit: cover;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      opacity: 0.65;
+      filter: grayscale(30%);
+      transition: opacity 0.3s, transform 0.3s, filter 0.3s;
+    }
+    .logo-reco:hover { opacity: 1; transform: scale(1.08); filter: grayscale(0); }
+    .reco-label { font-size: 0.58rem; letter-spacing: 0.45em; text-transform: uppercase; color: var(--muted); }
+    .footer-copy { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(232,226,216,0.15); padding-bottom: 8px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .hero { padding: 56px 0 40px; }
+      .track { grid-template-columns: 22px 1fr auto; gap: 10px; padding: 13px 12px; }
+      .platforms-row { flex-direction: column; align-items: center; }
+      .platform-btn { width: 210px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <main class="page">
+
+    <!-- ── Hero ── -->
+    <section class="hero">
+      <div class="logo-main-wrap">
+        <img src="Cuentos.jpg" alt="El Vendedor de Cuentos" class="logo-main" />
+      </div>
+      <div class="hero-text">
+        <p class="hero-eyebrow">El Vendedor de</p>
+        <h1 class="hero-title"><em>Cuentos</em></h1>
+        <p class="hero-sub">Música · Atmósferas · Historias</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ── Streaming Platforms ── -->
+    <div class="platforms-wrap">
+      <p class="platforms-label">Escucha en tu plataforma favorita</p>
+      <div class="platforms-row">
+
+        <a href="https://open.spotify.com/intl-es/track/7GTxpdHkGFMQeW6bGeM1ad"
+           target="_blank" rel="noopener noreferrer"
+           class="platform-btn spotify" aria-label="Escuchar en Spotify">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.493 17.321a.748.748 0 01-1.03.249c-2.82-1.724-6.37-2.114-10.553-1.158a.748.748 0 01-.354-1.453c4.574-1.048 8.496-.597 11.688 1.333a.748.748 0 01.249 1.029zm1.467-3.261a.935.935 0 01-1.287.308c-3.226-1.983-8.147-2.557-11.966-1.4a.936.936 0 01-1.17-.623.935.935 0 01.623-1.17c4.36-1.323 9.782-.682 13.493 1.598a.935.935 0 01.307 1.287zm.126-3.396c-3.868-2.297-10.248-2.508-13.944-1.388a1.121 1.121 0 01-.649-2.147c4.241-1.287 11.29-1.039 15.743 1.606a1.121 1.121 0 01-1.15 1.929z"/>
+          </svg>
+          Spotify
+        </a>
+
+        <a href="https://music.youtube.com/"
+           target="_blank" rel="noopener noreferrer"
+           class="platform-btn youtube" aria-label="Escuchar en YouTube Music">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm4.5 12.5l-6.75 3.9A.5.5 0 019 16V8a.5.5 0 01.75-.434l6.75 4a.5.5 0 010 .934z"/>
+          </svg>
+          YouTube Music
+        </a>
+
+        <a href="https://music.apple.com/"
+           target="_blank" rel="noopener noreferrer"
+           class="platform-btn itunes" aria-label="Escuchar en Apple Music / iTunes">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          Apple Music
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ── Tracklist ── -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Discografía</h2>
+        <div class="section-line"></div>
+      </div>
+      <ul class="tracklist" role="list">
+
+        <li class="track featured">
+          <span class="track-num">01</span>
+          <div class="track-info">
+            <span class="track-name">Niebla de Medianoche</span>
+            <span class="track-meta">
+              <span class="now-playing"><span>▪</span><span>▪</span><span>▪</span></span>
+              &nbsp;Single · 2024
+            </span>
+          </div>
+          <span class="track-duration">4:32</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">02</span>
+          <div class="track-info">
+            <span class="track-name">Último Tren al Mar</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">5:17</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">03</span>
+          <div class="track-info">
+            <span class="track-name">Deriva</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">3:58</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">04</span>
+          <div class="track-info">
+            <span class="track-name">Ecos de Otro Invierno</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">6:04</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">05</span>
+          <div class="track-info">
+            <span class="track-name">Sal y Ceniza</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">4:49</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">06</span>
+          <div class="track-info">
+            <span class="track-name">Luz Submarina</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">5:38</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">07</span>
+          <div class="track-info">
+            <span class="track-name">Puentes de Humo</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">4:11</span>
+        </li>
+
+        <li class="track">
+          <span class="track-num">08</span>
+          <div class="track-info">
+            <span class="track-name">Amanecer Quieto</span>
+            <span class="track-meta">EP El Vendedor de Cuentos · 2024</span>
+          </div>
+          <span class="track-duration">7:02</span>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- ── Footer ── -->
+    <div class="footer-divider"></div>
+    <footer class="footer">
+      <div class="reco-wrap">
+        <img src="Reco.jpg" alt="Reco Records" class="logo-reco" />
+        <p class="reco-label">Reco · Discografía</p>
+      </div>
+      <p class="footer-copy">© 2024 El Vendedor de Cuentos. Todos los derechos reservados.</p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
