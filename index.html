@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DASER — Discografía</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --bg:        #050508;
+    --surface:   #0d0d14;
+    --card:      #111120;
+    --border:    rgba(255,255,255,0.06);
+    --accent:    #c8ff00;
+    --accent2:   #00ffe1;
+    --text:      #e8e8f0;
+    --muted:     #55556a;
+    --danger:    #ff3a3a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN overlay ─────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── HERO ───────────────────────────────────────── */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('daser.png') center center / cover no-repeat;
+    filter: brightness(0.28) saturate(1.6);
+    z-index: 0;
+    transform: scale(1.04);
+    transition: transform 18s ease;
+  }
+
+  .hero:hover .hero-bg { transform: scale(1.0); }
+
+  .hero-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 40%, transparent 10%, rgba(5,5,8,0.7) 80%),
+      linear-gradient(to bottom, rgba(5,5,8,0.0) 0%, rgba(5,5,8,0.95) 100%);
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 20vw, 14rem);
+    line-height: 0.9;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+    text-shadow: none;
+  }
+
+  .hero-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-top: 1.4rem;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s forwards;
+    cursor: pointer;
+  }
+
+  .scroll-hint span {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: arrowPulse 1.6s ease-in-out infinite;
+  }
+
+  /* ── TRACKLIST SECTION ──────────────────────────── */
+  .tracklist-section {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 8rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-header::before {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── TRACK CARD ─────────────────────────────────── */
+  .track-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.18s;
+    position: relative;
+  }
+
+  .track-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+
+  .track-card.playing::before { transform: scaleY(1); }
+
+  .track-card:hover {
+    border-color: rgba(200,255,0,0.15);
+    transform: translateX(2px);
+  }
+
+  .track-card.playing {
+    border-color: rgba(200,255,0,0.3);
+    background: #13131f;
+  }
+
+  .track-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .track-num {
+    font-size: 0.65rem;
+    color: var(--muted);
+    min-width: 1.6rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .track-card.playing .track-num { color: var(--accent); }
+
+  .play-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+    outline: none;
+  }
+
+  .play-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.08);
+  }
+
+  .track-card.playing .play-btn {
+    border-color: var(--accent);
+    color: var(--bg);
+    background: var(--accent);
+  }
+
+  .play-btn svg { width: 14px; height: 14px; }
+
+  .track-info { flex: 1; min-width: 0; }
+
+  .track-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
+    line-height: 1.1;
+  }
+
+  .track-card.playing .track-name { color: var(--accent); }
+
+  .track-duration {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+  }
+
+  .track-error {
+    display: none;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--danger);
+    margin-top: 0.15rem;
+  }
+
+  .track-error.visible { display: block; }
+
+  /* ── PROGRESS BAR ───────────────────────────────── */
+  .progress-wrap {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+    padding: 0 1.2rem;
+  }
+
+  .track-card.playing .progress-wrap {
+    height: 36px;
+  }
+
+  .progress-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding-bottom: 0.9rem;
+  }
+
+  .time-label {
+    font-size: 0.6rem;
+    color: var(--muted);
+    min-width: 2.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .time-label.right { text-align: right; }
+
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--accent), var(--accent2));
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.1s linear;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .track-card.playing .progress-fill::after { opacity: 1; }
+
+  /* ── NOW PLAYING BAR (mobile sticky) ───────────── */
+  .now-playing-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,18,0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 100;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .now-playing-bar.visible { transform: translateY(0); }
+
+  .now-playing-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .now-playing-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .global-play-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent);
+    color: var(--bg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    outline: none;
+    transition: transform 0.15s;
+  }
+
+  .global-play-btn:hover { transform: scale(1.08); }
+  .global-play-btn svg { width: 16px; height: 16px; }
+
+  /* ── FOOTER ─────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 3rem 1rem 6rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── KEYFRAMES ──────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes arrowPulse {
+    0%,100% { opacity: 0.3; transform: scaleY(0.7); }
+    50%      { opacity: 1;   transform: scaleY(1);   }
+  }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(200,255,0,0.6); }
+    50%      { box-shadow: 0 0 0 5px rgba(200,255,0,0); }
+  }
+
+  /* ── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 520px) {
+    .track-name { font-size: 1.1rem; }
+    .track-top  { padding: 0.85rem 1rem; gap: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <p class="hero-label">Discografía — Selección</p>
+    <h1 class="hero-title">DASER</h1>
+    <p class="hero-sub">Escucha el catálogo completo</p>
+  </div>
+  <div class="scroll-hint" onclick="document.getElementById('tracks').scrollIntoView({behavior:'smooth'})">
+    <span>Escuchar</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- TRACKLIST -->
+<section class="tracklist-section" id="tracks">
+  <div class="section-header">
+    <span class="section-label">Tracks</span>
+  </div>
+  <div id="playlist"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  &copy; DASER — Todos los derechos reservados
+</footer>
+
+<!-- NOW PLAYING BAR -->
+<div class="now-playing-bar" id="nowPlayingBar">
+  <div class="now-playing-dot"></div>
+  <span class="now-playing-name" id="nowPlayingName">—</span>
+  <button class="global-play-btn" id="globalPlayBtn" aria-label="Play/Pause">
+    <!-- icon filled by JS -->
+  </button>
+</div>
+
+<script>
+  /* ── TRACK DATA ─────────────────────────────────── */
+  const tracks = [
+    "Big Barzz 555",
+    "Ciclo vicioso",
+    "COMEDIANTES",
+    "Excluido",
+    "Impartiendo clases",
+    "Mars atakk",
+    "Nadie III",
+    "Pionerón",
+    "VIN DOUX"
+  ];
+
+  /* ── SVG ICONS ──────────────────────────────────── */
+  const iconPlay  = `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
+  const iconPause = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>`;
+
+  /* ── STATE ──────────────────────────────────────── */
+  let currentAudio   = null;
+  let currentCard    = null;
+  let currentIndex   = -1;
+
+  /* ── HELPERS ────────────────────────────────────── */
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return `${m}:${sec}`;
+  }
+
+  /* ── BUILD PLAYLIST ─────────────────────────────── */
+  const playlist = document.getElementById('playlist');
+
+  tracks.forEach((name, i) => {
+    const file = `${name}.mp3`;
+
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.dataset.index = i;
+
+    card.innerHTML = `
+      <div class="track-top">
+        <span class="track-num">${String(i + 1).padStart(2, '0')}</span>
+        <button class="play-btn" aria-label="Reproducir ${name}">${iconPlay}</button>
+        <div class="track-info">
+          <div class="track-name">${name}</div>
+          <div class="track-duration" id="dur-${i}">— : —</div>
+          <div class="track-error" id="err-${i}">⚠ Archivo no encontrado</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-inner">
+          <span class="time-label" id="cur-${i}">0:00</span>
+          <div class="progress-bar" id="bar-${i}">
+            <div class="progress-fill" id="fill-${i}"></div>
+          </div>
+          <span class="time-label right" id="tot-${i}">0:00</span>
+        </div>
+      </div>
+    `;
+
+    playlist.appendChild(card);
+
+    const playBtn  = card.querySelector('.play-btn');
+    const bar      = card.querySelector('.progress-bar');
+
+    /* pre-load metadata for duration */
+    const metaAudio = new Audio();
+    metaAudio.preload = 'metadata';
+    metaAudio.src = file;
+    metaAudio.addEventListener('loadedmetadata', () => {
+      document.getElementById(`dur-${i}`).textContent = fmt(metaAudio.duration);
+      document.getElementById(`tot-${i}`).textContent = fmt(metaAudio.duration);
+    });
+    metaAudio.addEventListener('error', () => {
+      document.getElementById(`err-${i}`).classList.add('visible');
+      console.warn(`[DASER] No se encontró: ${file}`);
+    });
+
+    /* click on card (excluding progress bar) */
+    card.querySelector('.track-top').addEventListener('click', () => toggleTrack(i, name, file, card, playBtn));
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleTrack(i, name, file, card, playBtn);
+    });
+
+    /* seek */
+    bar.addEventListener('click', (e) => {
+      if (!currentAudio || currentIndex !== i) return;
+      const rect = bar.getBoundingClientRect();
+      const pct  = (e.clientX - rect.left) / rect.width;
+      currentAudio.currentTime = pct * currentAudio.duration;
+    });
+  });
+
+  /* ── TOGGLE TRACK ───────────────────────────────── */
+  function toggleTrack(i, name, file, card, btn) {
+    /* same track → play/pause */
+    if (currentIndex === i && currentAudio) {
+      if (currentAudio.paused) {
+        currentAudio.play().catch(() => {});
+        setPlaying(card, btn, name);
+      } else {
+        currentAudio.pause();
+        setPaused(card, btn);
+      }
+      return;
+    }
+
+    /* stop previous */
+    if (currentAudio) {
+      currentAudio.pause();
+      if (currentCard) setPaused(currentCard, currentCard.querySelector('.play-btn'));
+    }
+
+    /* new track */
+    const audio = new Audio(file);
+    audio.preload = 'auto';
+
+    audio.addEventListener('error', () => {
+      document.getElementById(`err-${i}`).classList.add('visible');
+      console.error(`[DASER] Error al cargar: ${file}`);
+      resetBar(i);
+      currentAudio = null;
+      currentIndex = -1;
+      currentCard  = null;
+      hideNowPlaying();
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      document.getElementById(`dur-${i}`).textContent = fmt(audio.duration);
+      document.getElementById(`tot-${i}`).textContent = fmt(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      document.getElementById(`fill-${i}`).style.width = pct + '%';
+      document.getElementById(`cur-${i}`).textContent  = fmt(audio.currentTime);
+    });
+
+    audio.addEventListener('ended', () => {
+      setPaused(card, btn);
+      resetBar(i);
+      currentAudio = null;
+      currentIndex = -1;
+      currentCard  = null;
+      hideNowPlaying();
+    });
+
+    audio.play().catch(() => {
+      console.warn(`[DASER] No se pudo reproducir: ${file}`);
+    });
+
+    currentAudio = audio;
+    currentCard  = card;
+    currentIndex = i;
+
+    setPlaying(card, btn, name);
+  }
+
+  /* ── UI STATE HELPERS ───────────────────────────── */
+  function setPlaying(card, btn, name) {
+    card.classList.add('playing');
+    btn.innerHTML = iconPause;
+    showNowPlaying(name);
+    document.getElementById('globalPlayBtn').innerHTML = iconPause;
+  }
+
+  function setPaused(card, btn) {
+    card.classList.remove('playing');
+    btn.innerHTML = iconPlay;
+    document.getElementById('globalPlayBtn').innerHTML = iconPlay;
+  }
+
+  function resetBar(i) {
+    document.getElementById(`fill-${i}`).style.width = '0%';
+    document.getElementById(`cur-${i}`).textContent  = '0:00';
+  }
+
+  /* ── NOW PLAYING BAR ────────────────────────────── */
+  const nowPlayingBar  = document.getElementById('nowPlayingBar');
+  const nowPlayingName = document.getElementById('nowPlayingName');
+  const globalPlayBtn  = document.getElementById('globalPlayBtn');
+
+  globalPlayBtn.innerHTML = iconPlay;
+
+  function showNowPlaying(name) {
+    nowPlayingName.textContent = name;
+    nowPlayingBar.classList.add('visible');
+  }
+
+  function hideNowPlaying() {
+    nowPlayingBar.classList.remove('visible');
+  }
+
+  globalPlayBtn.addEventListener('click', () => {
+    if (!currentAudio) return;
+    if (currentAudio.paused) {
+      currentAudio.play().catch(() => {});
+      if (currentCard) setPlaying(currentCard, currentCard.querySelector('.play-btn'), nowPlayingName.textContent);
+    } else {
+      currentAudio.pause();
+      if (currentCard) setPaused(currentCard, currentCard.querySelector('.play-btn'));
+      globalPlayBtn.innerHTML = iconPlay;
+    }
+  });
+</script>
+</body>
+</html>
