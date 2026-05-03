@@ -1,334 +1,342 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>一朵玫瑰</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Elders' Drinking Song | Canto de los ancianos | Música Amis</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: #0a0008;
-  }
+    body {
+      background: linear-gradient(145deg, #d8eed8 0%, #bcddae 100%);
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+      color: #1d3b2a;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
 
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: radial-gradient(ellipse at 50% 30%, #3d0018 0%, #1a000a 45%, #0a0008 100%);
-    font-family: "PingFang SC", "Microsoft YaHei", "Noto Serif SC", "Source Han Serif SC", STSong, serif;
-  }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      background-color: #f6fef2;
+      border-radius: 48px;
+      box-shadow: 0 25px 40px -14px rgba(40, 60, 20, 0.35);
+      overflow: hidden;
+      padding: 2rem 2rem 2.8rem;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(100, 140, 70, 0.3);
+      backdrop-filter: blur(0px);
+    }
 
-  /* Stars */
-  .stars {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    border-radius: 50%;
-    background: #fff;
-    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
-    opacity: 0;
-  }
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #1f543b;
+      border-left: 6px solid #6f9e3f;
+      padding-left: 1.2rem;
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+      text-shadow: 0 1px 1px rgba(140, 180, 80, 0.2);
+    }
 
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; transform: scale(0.5); }
-    50% { opacity: var(--bright, 0.7); transform: scale(1); }
-  }
+    .subhead {
+      font-size: 1.28rem;
+      font-weight: 540;
+      color: #497e48;
+      margin-bottom: 0.9rem;
+      padding-left: 1.2rem;
+      background: linear-gradient(90deg, #e2f3da, transparent);
+      display: inline-block;
+      border-radius: 60px;
+      padding: 0.2rem 1rem 0.2rem 1.2rem;
+    }
 
-  /* Floating petals */
-  .petals-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-  .fp {
-    position: absolute;
-    top: -30px;
-    width: 8px; height: 10px;
-    border-radius: 50% 50% 50% 0;
-    background: radial-gradient(circle at 40% 40%, #ff8ca0, #c0003a88);
-    animation: fallPetal var(--fd, 8s) linear infinite var(--fdelay, 0s);
-    opacity: 0;
-    transform-origin: center;
-  }
-  @keyframes fallPetal {
-    0%   { opacity: 0; top: -20px; transform: rotate(var(--frot,0deg)) translateX(0); }
-    10%  { opacity: 0.6; }
-    80%  { opacity: 0.4; }
-    100% { opacity: 0; top: 105vh; transform: rotate(calc(var(--frot,0deg) + 360deg)) translateX(var(--fdx, 40px)); }
-  }
+    .meta-line {
+      font-size: 0.85rem;
+      color: #5e7c4a;
+      margin: 0.9rem 0 0.4rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
 
-  /* Particles / sparkles */
-  .sparkles {
-    position: absolute;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .spark {
-    position: absolute;
-    width: 3px; height: 3px;
-    border-radius: 50%;
-    background: #ffd6e0;
-    animation: sparkle var(--sd, 2.5s) ease-in-out infinite var(--sdelay, 0s);
-    opacity: 0;
-  }
-  @keyframes sparkle {
-    0%, 100% { opacity: 0; transform: scale(0) translate(0,0); }
-    30% { opacity: 1; }
-    60% { opacity: 0.7; transform: scale(1.5) translate(var(--sdx,4px), var(--sdy,-8px)); }
-    100% { opacity: 0; transform: scale(0) translate(var(--sdx2,8px), var(--sdy2,-20px)); }
-  }
+    .date-tag {
+      background-color: #e4f5da;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #306e3a;
+      box-shadow: inset 0 0 0 1px #cde2bc;
+    }
 
-  /* Rose container */
-  .rose-wrap {
-    position: relative;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: float 4.5s ease-in-out infinite, sway 7s ease-in-out infinite;
-    filter: drop-shadow(0 0 22px #c0003a88) drop-shadow(0 0 60px #80001e44);
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-14px) rotate(0.5deg); }
-  }
-  @keyframes sway {
-    0%, 100% { transform: rotate(-1.5deg); }
-    50% { transform: rotate(1.5deg); }
-  }
+    .description {
+      margin: 1.2rem 0 1.6rem 0;
+      font-size: 1rem;
+      color: #2b5436;
+      background: #effbe7;
+      padding: 1.2rem 1.4rem;
+      border-radius: 28px;
+      border: 1px solid #cde0bc;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
 
-  /* SVG rose */
-  .rose-svg {
-    width: min(220px, 46vw);
-    height: auto;
-  }
+    .description p {
+      margin-bottom: 0.7rem;
+    }
 
-  /* Glow ring behind bloom */
-  .glow-ring {
-    position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: min(180px, 38vw);
-    height: min(180px, 38vw);
-    border-radius: 50%;
-    background: radial-gradient(circle, #ff003355 0%, #8b000022 50%, transparent 72%);
-    animation: glowPulse 3s ease-in-out infinite;
-    z-index: -1;
-  }
-  @keyframes glowPulse {
-    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.18); }
-  }
+    .enjoy-emoji {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      margin-top: 0.25rem;
+    }
 
-  /* Text */
-  .message {
-    position: relative;
-    z-index: 3;
-    margin-top: clamp(10px, 3vw, 18px);
-    padding: 0 clamp(22px, 7vw, 40px);
-    text-align: center;
-    color: #fde8ea;
-    font-size: clamp(14px, 4.2vw, 18px);
-    line-height: 1.95;
-    letter-spacing: 0.06em;
-    text-shadow: 0 0 18px #ff006688, 0 1px 3px #00000099;
-    animation: fadeShimmer 6s ease-in-out infinite;
-    max-width: 420px;
-  }
-  @keyframes fadeShimmer {
-    0%   { opacity: 0.82; text-shadow: 0 0 12px #ff006655, 0 1px 3px #00000099; }
-    50%  { opacity: 1;    text-shadow: 0 0 28px #ff88aa99, 0 1px 3px #00000099; }
-    100% { opacity: 0.82; text-shadow: 0 0 12px #ff006655, 0 1px 3px #00000099; }
-  }
-  .message-enter {
-    animation: fadeIn 2.5s ease forwards, fadeShimmer 6s 2.5s ease-in-out infinite;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    .video-section {
+      margin: 2rem 0 1.8rem 0;
+      border-radius: 32px;
+      background: #eef7e6;
+      padding: 1rem 1rem 1rem 1rem;
+      box-shadow: 0 6px 14px rgba(70, 100, 40, 0.1);
+    }
 
-  /* Petal pulse on SVG */
-  @keyframes petalPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
-  }
-  .petals-outer { animation: petalPulse 3s ease-in-out infinite; }
-  .petals-mid   { animation: petalPulse 3s ease-in-out infinite 0.4s; }
-  .petals-inner { animation: petalPulse 3s ease-in-out infinite 0.8s; }
+    .video-caption {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.85rem;
+      padding-left: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-  /* Leaf sway */
-  @keyframes leafSway {
-    0%, 100% { transform-origin: bottom center; transform: rotate(-2deg); }
-    50% { transform-origin: bottom center; transform: rotate(3deg); }
-  }
-  .leaf-left  { animation: leafSway 5s ease-in-out infinite; }
-  .leaf-right { animation: leafSway 5s ease-in-out infinite 1.2s; }
-</style>
+    .video-caption span:first-child {
+      background: #558b2f;
+      color: white;
+      padding: 0.25rem 1rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #1e2a1a;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.25);
+      margin: 0.5rem 0 0.7rem 0;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-attribution {
+      font-size: 0.75rem;
+      text-align: center;
+      color: #5e806a;
+      margin-top: 0.7rem;
+      font-weight: 500;
+    }
+
+    .instagram-btn-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0 1rem;
+    }
+
+    .insta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(105deg, #1b5e2a, #2e7d32, #4caf50);
+      padding: 0.85rem 2.2rem;
+      border-radius: 80px;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.05rem;
+      box-shadow: 0 10px 18px -6px #2c5a2ac4;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    }
+
+    .insta-link:hover {
+      transform: scale(1.02);
+      box-shadow: 0 14px 22px -8px #1e4a1ebb;
+      background: linear-gradient(105deg, #2b6e30, #3e9142);
+    }
+
+    .insta-link:active {
+      transform: scale(0.97);
+    }
+
+    .insta-icon {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      display: inline-block;
+    }
+
+    .discover-text {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.95rem;
+      color: #46824b;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      background: #e2f0d8;
+      display: inline-block;
+      padding: 0.3rem 1.8rem;
+      border-radius: 60px;
+      backdrop-filter: blur(2px);
+    }
+
+    .divider {
+      width: 70px;
+      height: 3px;
+      background: #abd47e;
+      margin: 1.8rem auto 1rem;
+      border-radius: 6px;
+    }
+
+    .footer-note {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #6b8c5c;
+      margin-top: 1.5rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 1.2rem;
+      }
+      .container {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      .subhead {
+        font-size: 1rem;
+      }
+      .description {
+        padding: 0.9rem 1rem;
+      }
+      .insta-link {
+        padding: 0.7rem 1.6rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    .highlight-green {
+      background: linear-gradient(120deg, #e1f5d5, #cbe6bc);
+      border-radius: 24px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Stars -->
-<div class="stars" id="stars"></div>
-
-<!-- Falling background petals -->
-<div class="petals-bg" id="petalsBg"></div>
-
-<div class="glow-ring"></div>
-
-<!-- Rose SVG -->
-<div class="rose-wrap">
-  <div class="sparkles" id="sparks"></div>
-
-  <svg class="rose-svg" viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="petalGrad" cx="50%" cy="60%" r="60%">
-        <stop offset="0%" stop-color="#ff6b8a"/>
-        <stop offset="40%" stop-color="#e0003d"/>
-        <stop offset="100%" stop-color="#7a0020"/>
-      </radialGradient>
-      <radialGradient id="petalMid" cx="50%" cy="55%" r="60%">
-        <stop offset="0%" stop-color="#ff8fa3"/>
-        <stop offset="50%" stop-color="#cc0033"/>
-        <stop offset="100%" stop-color="#5a0018"/>
-      </radialGradient>
-      <radialGradient id="petalInner" cx="50%" cy="50%" r="60%">
-        <stop offset="0%" stop-color="#ffb3c1"/>
-        <stop offset="60%" stop-color="#ff2255"/>
-        <stop offset="100%" stop-color="#800020"/>
-      </radialGradient>
-      <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#1a5c1a"/>
-        <stop offset="50%" stop-color="#2e8b2e"/>
-        <stop offset="100%" stop-color="#1a5c1a"/>
-      </linearGradient>
-      <linearGradient id="leafGradL" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#3aab3a"/>
-        <stop offset="100%" stop-color="#145014"/>
-      </linearGradient>
-      <linearGradient id="leafGradR" x1="100%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#3aab3a"/>
-        <stop offset="100%" stop-color="#145014"/>
-      </linearGradient>
-      <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffcccc"/>
-        <stop offset="100%" stop-color="#cc0044"/>
-      </radialGradient>
-      <filter id="softBloom">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-
-    <!-- Stem -->
-    <path d="M100 420 C96 380 92 340 94 310 C96 280 100 250 100 220" 
-          stroke="url(#stemGrad)" stroke-width="6" fill="none" stroke-linecap="round"/>
-
-    <!-- Thorns -->
-    <path d="M96 360 C86 355 82 348 87 344" stroke="#2e7a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M100 300 C112 295 117 288 111 284" stroke="#2e7a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-    <!-- Leaf left -->
-    <g class="leaf-left">
-      <path d="M94 330 C74 315 60 305 62 290 C72 290 85 300 94 315 Z" fill="url(#leafGradL)" opacity="0.95"/>
-      <path d="M94 330 C80 320 70 312 62 290" stroke="#1a5c1a" stroke-width="0.8" fill="none"/>
-    </g>
-
-    <!-- Leaf right -->
-    <g class="leaf-right">
-      <path d="M100 280 C120 264 140 258 142 244 C130 244 116 255 100 268 Z" fill="url(#leafGradR)" opacity="0.95"/>
-      <path d="M100 280 C118 266 132 258 142 244" stroke="#1a5c1a" stroke-width="0.8" fill="none"/>
-    </g>
-
-    <!-- Sepal -->
-    <path d="M80 225 C72 218 68 208 76 204 C84 200 92 210 100 218" fill="#2e7a1a" opacity="0.9"/>
-    <path d="M120 225 C128 218 132 208 124 204 C116 200 108 210 100 218" fill="#2e7a1a" opacity="0.9"/>
-    <path d="M88 222 C85 212 86 200 93 196 C97 200 99 210 100 218" fill="#3aab3a" opacity="0.8"/>
-    <path d="M112 222 C115 212 114 200 107 196 C103 200 101 210 100 218" fill="#3aab3a" opacity="0.8"/>
-    <path d="M100 218 C98 210 99 200 100 194 C101 200 102 210 100 218" fill="#4ec44e" opacity="0.7"/>
-
-    <!-- OUTER PETALS -->
-    <g class="petals-outer" filter="url(#softBloom)">
-      <path d="M100 218 C78 205 60 185 62 162 C64 140 80 128 100 125" fill="url(#petalGrad)" opacity="0.88"/>
-      <path d="M100 218 C122 205 140 185 138 162 C136 140 120 128 100 125" fill="url(#petalGrad)" opacity="0.88"/>
-      <path d="M100 218 C92 195 82 168 88 145 C92 130 98 122 100 118" fill="url(#petalGrad)" opacity="0.82"/>
-      <path d="M100 218 C108 195 118 168 112 145 C108 130 102 122 100 118" fill="url(#petalGrad)" opacity="0.82"/>
-      <path d="M100 218 C80 210 58 200 52 178 C46 156 60 140 80 138" fill="url(#petalGrad)" opacity="0.78"/>
-      <path d="M100 218 C120 210 142 200 148 178 C154 156 140 140 120 138" fill="url(#petalGrad)" opacity="0.78"/>
-    </g>
-
-    <!-- MIDDLE PETALS -->
-    <g class="petals-mid">
-      <path d="M100 210 C84 196 70 178 74 158 C78 140 92 132 100 130" fill="url(#petalMid)" opacity="0.9"/>
-      <path d="M100 210 C116 196 130 178 126 158 C122 140 108 132 100 130" fill="url(#petalMid)" opacity="0.9"/>
-      <path d="M100 210 C88 196 78 172 84 152 C88 138 96 128 100 126" fill="url(#petalMid)" opacity="0.85"/>
-      <path d="M100 210 C112 196 122 172 116 152 C112 138 104 128 100 126" fill="url(#petalMid)" opacity="0.85"/>
-    </g>
-
-    <!-- INNER PETALS -->
-    <g class="petals-inner">
-      <path d="M100 204 C90 192 82 176 88 160 C92 148 98 140 100 138" fill="url(#petalInner)" opacity="0.95"/>
-      <path d="M100 204 C110 192 118 176 112 160 C108 148 102 140 100 138" fill="url(#petalInner)" opacity="0.95"/>
-      <path d="M100 204 C92 192 86 178 90 162 C94 150 99 142 100 140" fill="url(#petalInner)" opacity="0.9"/>
-      <path d="M100 204 C108 192 114 178 110 162 C106 150 101 142 100 140" fill="url(#petalInner)" opacity="0.9"/>
-    </g>
-
-    <!-- Center -->
-    <ellipse cx="100" cy="152" rx="14" ry="12" fill="url(#centerGrad)" opacity="0.98"/>
-    <ellipse cx="100" cy="152" rx="8" ry="7" fill="#ffc0cb" opacity="0.7"/>
-    <ellipse cx="100" cy="151" rx="4" ry="3.5" fill="#ffeeee" opacity="0.9"/>
-  </svg>
+<div class="container">
+  
+  <h1>Elders' Drinking Song</h1>
+  <div class="subhead">Canto de celebración de los ancianos (Taiwan)</div>
+  
+  <div class="meta-line">
+    <span class="date-tag">🎵 Desde los sonidos de los pueblos originarios de Taiwán.</span>
+    <span class="date-tag">📅 Fecha de lanzamiento: 7 de octubre de 1998</span>
+  </div>
+  
+  <div class="description">
+    <p>Estás escuchando el canto tradicional del pueblo Amis de Falangaw, <strong>"Elders' Drinking Song" (Canto de celebración de los ancianos)</strong>, interpretado por Difang Duana, Igyu Duana y el Coro Malan.</p>
+    <p class="enjoy-emoji">¡Espero que lo disfrutes! 🎵🎶🎼</p>
+  </div>
+  
+  <div style="margin-top: 0.3rem;">
+    <h2 style="font-size: 1.35rem; font-weight: 700; color: #2c7840; margin-bottom: 0.2rem;">Elders Drinking Song (Original Recording) 老人飲酒歌</h2>
+    <div style="font-size: 0.9rem; color: #5d8c58; margin-bottom: 0.9rem; font-weight: 500;">郭英男和馬蘭吟唱隊 · 滾石唱片</div>
+  </div>
+  
+  <div class="video-section">
+    <div class="video-caption">
+      <span>🎬 VIDEO ORIGINAL</span>
+      <span>🔊 Escucha la tradición</span>
+    </div>
+    <div class="video-wrapper">
+      <iframe 
+        src="https://www.youtube.com/watch?v=J3rB4sXWbYI" 
+        title="Elders Drinking Song (Original Recording) 老人飲酒歌 - 郭英男 馬蘭吟唱隊"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-attribution">
+      🎵 Grabación original — Falangaw Amis: Difang Duana, Igyu Duana, Coro Malan
+    </div>
+  </div>
+  
+  <div class="description" style="background: #f0fbe8; margin-top: 0.2rem;">
+    <p>From Taiwanese aboriginal sounds.<br>
+    Released on: 1998-10-07.<br>
+    You are listening to Falangaw Amis people's traditional chant <strong>"Elders' Drinking Song"</strong> by Difang Duana, Igyu Duana, and Malan Choir.</p>
+    <p class="enjoy-emoji">Hope you enjoy !!! 🎵🎼🎶🎼</p>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1rem;">
+    <div class="instagram-btn-container">
+      <a href="https://www.instagram.com/huggia.bcn?igsh=MWhkYnRpNHNmbWdzNA==" target="_blank" rel="noopener noreferrer" class="insta-link" id="instagramButton">
+        <svg class="insta-icon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.336 3.608 1.311.976.976 1.25 2.242 1.311 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.336 2.633-1.311 3.608-.976.976-2.242 1.25-3.608 1.311-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.336-3.608-1.311-.976-.976-1.25-2.242-1.311-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.336-2.633 1.311-3.608.976-.976 2.242-1.25 3.608-1.311 1.266-.058 1.646-.07 4.85-.07zM12 0C8.742 0 8.334.014 7.054.072 4.506.192 2.297.764 1.13 1.931.086 2.975-.033 5.142-.072 7.054-.014 8.334 0 8.742 0 12s.014 3.666.072 4.946c.192 2.548.764 4.757 1.93 5.924 1.167 1.167 3.376 1.739 5.924 1.93 1.28.058 1.688.072 4.946.072s3.666-.014 4.946-.072c2.548-.192 4.757-.764 5.924-1.93 1.167-1.167 1.739-3.376 1.93-5.924.058-1.28.072-1.688.072-4.946s-.014-3.666-.072-4.946c-.192-2.548-.764-4.757-1.93-5.924C21.019.764 18.81.192 16.262.072 14.982.014 14.574 0 11.258 0h.742z"/>
+          <path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+        Follow me on Instagram
+      </a>
+    </div>
+    <div class="discover-text">
+      📸 Discover other Art · Huggia BCN
+    </div>
+  </div>
+  
+  <div class="divider"></div>
+  <div class="footer-note">
+    🌿 Canto tradicional Amis de Falangaw — Raíces vivas · Música ancestral
+  </div>
 </div>
 
-<!-- Message -->
-<p class="message message-enter">
-  我的小兔子，<br>
-  距离阻挡不了我送你一朵玫瑰。<br>
-  这朵玫瑰不会占你行李箱里任何空间。
-</p>
-
 <script>
-  // Generate stars
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;--bright:${0.3+Math.random()*0.7};width:${1+Math.random()*2}px;height:${1+Math.random()*2}px`;
-    starsEl.appendChild(s);
-  }
-
-  // Falling petals
-  const pbg = document.getElementById('petalsBg');
-  for (let i = 0; i < 12; i++) {
-    const p = document.createElement('div');
-    p.className = 'fp';
-    p.style.cssText = `left:${Math.random()*100}%;--fd:${6+Math.random()*8}s;--fdelay:${Math.random()*10}s;--frot:${Math.random()*360}deg;--fdx:${-60+Math.random()*120}px`;
-    pbg.appendChild(p);
-  }
-
-  // Sparkles around rose
-  const sparksEl = document.getElementById('sparks');
-  for (let i = 0; i < 18; i++) {
-    const sp = document.createElement('div');
-    sp.className = 'spark';
-    const angle = Math.random() * Math.PI * 2;
-    const r = 30 + Math.random() * 60;
-    sp.style.cssText = `left:calc(50% + ${Math.cos(angle)*r}px);top:${10+Math.random()*60}%;--sd:${1.5+Math.random()*3}s;--sdelay:${Math.random()*4}s;--sdx:${-10+Math.random()*20}px;--sdy:${-10+Math.random()*5}px;--sdx2:${-15+Math.random()*30}px;--sdy2:${-20+Math.random()*-10}px`;
-    sparksEl.appendChild(sp);
-  }
+  (function() {
+    console.log("Elders' Drinking Song — Diseño renovado en verde claro · Video oficial integrado");
+    const instaBtn = document.getElementById('instagramButton');
+    if (instaBtn) {
+      instaBtn.addEventListener('click', (e) => {
+        const url = instaBtn.getAttribute('href');
+        if (url && url.includes('instagram.com')) {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        }
+      });
+    }
+  })();
 </script>
 </body>
 </html>
