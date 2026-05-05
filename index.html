@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Elders' Drinking Song | Canto de los ancianos | Música Amis</title>
@@ -154,6 +154,85 @@
       margin-top: 0.7rem;
       font-weight: 500;
     }
+    
+    /* ---- Nuevos estilos para el reproductor de video local (Cheese2Share) ---- */
+    .local-video-block {
+      margin: 2rem 0 1.5rem;
+      border-radius: 32px;
+      background: #eef7e6;
+      padding: 1rem;
+      box-shadow: 0 6px 14px rgba(70, 100, 40, 0.1);
+    }
+    
+    .local-video-caption {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: #2c5e2f;
+    }
+    
+    .local-video-caption span:first-child {
+      background: #3e7542;
+      color: white;
+      padding: 0.25rem 1rem;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .custom-video-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 28px;
+      background-color: #1f2a1c;
+      box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.3);
+      transition: box-shadow 0.2s;
+    }
+    
+    .custom-video-container video {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      transition: opacity 1s ease;
+      border-radius: 28px;
+    }
+    
+    .video-overlay-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.02);
+      pointer-events: none;
+      border-radius: 28px;
+    }
+    
+    .video-local-note {
+      font-size: 0.72rem;
+      text-align: center;
+      color: #618a58;
+      margin-top: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      background: #e1f0d6;
+      display: inline-block;
+      width: auto;
+      padding: 0.2rem 1rem;
+      border-radius: 50px;
+    }
+    
+    /* ---- fin estilos adicionales ---- */
 
     .instagram-btn-container {
       display: flex;
@@ -289,6 +368,32 @@
     </div>
   </div>
   
+  <!-- SECCIÓN NUEVA: REPRODUCTOR DE VIDEO LOCAL (Cheese2Share / Huggia) -->
+  <div class="local-video-block">
+    <div class="local-video-caption">
+      <span>🎥 HUGGIA · CHEESE2SHARE</span>
+      <span>🍷 Paisaje sonoro & fusión</span>
+    </div>
+    <div class="custom-video-container">
+      <video 
+        id="huggia-video"
+        autoplay 
+        muted 
+        loop 
+        playsinline 
+        poster="images/video-first-frame.jpg"
+        style="opacity: 0; transition: opacity 1s ease;">
+        <source src="your-video-file.mp4" type="video/mp4">
+        Tu navegador no soporta el elemento de video.
+      </video>
+      <div class="video-overlay-layer"></div>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 0.5rem;">
+      <span class="video-local-note">🎬 Video en loop (mudo) · atmósfera ancestral · cortesía de Huggia</span>
+    </div>
+  </div>
+  <!-- FIN NUEVA SECCIÓN DE VIDEO LOCAL -->
+  
   <div class="description" style="background: #f0fbe8; margin-top: 0.2rem;">
     <p>From Taiwanese aboriginal sounds.<br>
     Released on: 1998-10-07.<br>
@@ -319,7 +424,7 @@
 
 <script>
   (function() {
-    console.log("Elders' Drinking Song — Diseño renovado en verde claro · Video oficial integrado");
+    console.log("Elders' Drinking Song — Diseño renovado en verde claro · Video oficial integrado + nuevo video local Huggia");
     const instaBtn = document.getElementById('instagramButton');
     if (instaBtn) {
       instaBtn.addEventListener('click', (e) => {
@@ -328,6 +433,41 @@
           window.open(url, '_blank', 'noopener,noreferrer');
         }
       });
+    }
+    
+    // ---- Lógica para el nuevo video local (Cheese2Share / Huggia) ----
+    // Se obtiene el elemento video, se fuerza autoplay con mute y además se aplica el efecto de opacidad
+    const localVideo = document.getElementById('huggia-video');
+    if (localVideo) {
+      // Aseguramos muted por si algún navegador lo requiere (ya está en el markup pero redundante)
+      localVideo.muted = true;
+      // Intentamos reproducir automáticamente con manejo de promesa
+      const playLocal = localVideo.play();
+      if (playLocal !== undefined) {
+        playLocal.then(() => {
+          console.log("Video local (Huggia) reproduciéndose automáticamente.");
+          // Una vez que se reproduce añadimos opacidad total para un fade-in sutil
+          localVideo.style.opacity = '1';
+        }).catch(error => {
+          console.warn("Reproducción automática bloqueada para video local: ", error);
+          // Si falla autoplay se mantiene muted pero al menos mostramos el frame con opacidad completa.
+          localVideo.style.opacity = '1';
+          // Podría agregarse un pequeño tooltip, pero se mantiene elegante.
+        });
+      } else {
+        // Si el navegador no soporta promesa de play, igual mostramos el video
+        localVideo.style.opacity = '1';
+      }
+      
+      // cuando el video está cargado y listo, aseguramos que el poster no quede encubierto con opacidad
+      localVideo.addEventListener('canplaythrough', () => {
+        if (localVideo.style.opacity !== '1') {
+          localVideo.style.opacity = '1';
+        }
+      });
+      
+      // Si por alguna razón el poster no existe o el source no está disponible, no afecta el layout.
+      // Nota: El atributo poster apunta a "images/video-first-frame.jpg" (podría reemplazarse después)
     }
   })();
 </script>
